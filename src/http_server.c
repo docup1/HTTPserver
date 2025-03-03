@@ -1,7 +1,7 @@
 /*
  * http_server.c
  * Реализация функций для разбора HTTP-запросов, формирования HTTP-ответов и их отправки.
- */
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,7 +23,6 @@ const char* get_content_type_str(ContentType type) {
     switch (type) {
         case CONTENT_TEXT_HTML: return "text/html";
         case CONTENT_APPLICATION_JSON: return "application/json";
-        case CONTENT_TEXT_PLAIN:
         default: return "text/plain";
     }
 }

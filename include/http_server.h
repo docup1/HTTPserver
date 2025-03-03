@@ -1,7 +1,7 @@
 /*
-* http_server.h
+ * http_server.h
  * Заголовочный файл, содержащий объявления структур и функций для работы HTTP-сервера.
- */
+*/
 
 #ifndef HTTP_SERVER_H
 #define HTTP_SERVER_H
