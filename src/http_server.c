@@ -65,8 +65,21 @@ void send_response(int client_socket, HttpResponse *response) {
              "%s\n",
              status_text, get_content_type_str(response->content_type), content_length, response->content);
 
-    // Отправка ответа клиенту
-    send(client_socket, buffer, strlen(buffer), 0);
+    // Отправка ответа пакетами (частями)
+    int total_sent = 0;
+    int buffer_length = strlen(buffer);
+    int chunk_size = 128; // размер одного пакета (можно изменить в зависимости от требований)
+
+    while (total_sent < buffer_length) {
+        int bytes_left = buffer_length - total_sent;
+        int current_chunk = (bytes_left < chunk_size) ? bytes_left : chunk_size;
+        int sent = send(client_socket, buffer + total_sent, current_chunk, 0);
+        if (sent < 0) {
+            perror("Ошибка отправки данных");
+            break;
+        }
+        total_sent += sent;
+    }
     // Закрытие соединения с клиентом
     close(client_socket);
 }
@@ -75,7 +88,7 @@ void send_response(int client_socket, HttpResponse *response) {
 void handle_client(int client_socket) {
     char buffer[BUFFER_SIZE];
     // Получение данных от клиента
-    int received = recv(client_socket, buffer, BUFFER_SIZE - 1, 0);
+    int received = recv(client_socket, buffer, BUFFER_SIZE - 1, 0); //?
     if (received < 0) {
         perror("Ошибка получения данных");
         close(client_socket);
